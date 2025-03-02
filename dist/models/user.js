@@ -23,7 +23,7 @@ const userSchema = new mongoose_1.default.Schema({
 //middleware for mongodb
 userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (this.isModified("password")) {
+        if (this.isModified('')) {
             this.password = yield bcryptjs_1.default.hash(this.password, 8);
         }
         next();

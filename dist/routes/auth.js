@@ -21,9 +21,9 @@ const auth_1 = __importDefault(require("../middleware/auth"));
 const router = express_1.default.Router();
 router.post("/login", [
     (0, express_validator_1.check)("email", "Email is required").isEmail(),
-    (0, express_validator_1.check)("password", "Password with 6 or more characters required").isLength({
+    (0, express_validator_1.check)("password", "Password more than 6 characters required").isLength({
         min: 6,
-    }),
+    })
 ], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
@@ -33,12 +33,14 @@ router.post("/login", [
     try {
         const user = yield user_1.default.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "Invalid Credentials" });
+            return res.status(400).json({ message: "Invalid credentials" });
         }
+        ;
         const isMatch = yield bcryptjs_1.default.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid Credentials" });
+            return res.status(400).json({ message: "Invalid credentials" });
         }
+        ;
         const token = jsonwebtoken_1.default.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, {
             expiresIn: "1d",
         });
